@@ -24,3 +24,4 @@ nbproject/*
 *.DS_Store
 *.lock
 build.xml
+*/target/*
