@@ -11,6 +11,7 @@ import com.dostojic.climbers.common.communication.Receiver;
 import com.dostojic.climbers.common.communication.Request;
 import com.dostojic.climbers.common.communication.Response;
 import com.dostojic.climbers.common.communication.Sender;
+import com.dostojic.climbers.common.dto.ClimberDto;
 import com.dostojic.climbers.logic.Controller;
 import com.dostojic.climbers.domain.Climber;
 import com.dostojic.climbers.swing.bff.mapper.ClimberMapper;
@@ -18,7 +19,6 @@ import com.dostojic.climbers.swing.bff.mapper.LoginCredentialsMapper;
 import com.dostojic.climbers.swing.bff.mapper.UserMapper;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Optional;
 
 /**
  *
@@ -69,9 +69,9 @@ public class Server {
                     break;
                 case FIND_CLIMBER:
                     Integer id=(Integer)request.getArgument();
-                    Optional<Climber> optionalClimber = controller.findClimberById(id);
-                    if (optionalClimber.isPresent()){
-                        response.setResult(ClimberMapper.INSTANCE.toDto(optionalClimber.get()));
+                    Climber optionalClimber = controller.findClimberById(id);
+                    if (optionalClimber != null){
+                        response.setResult(ClimberMapper.INSTANCE.toDto(optionalClimber));
                     }else{
                         // we throw exception because it is expected to get climber back
                         // TODO Throw Bussines exception not general one!
@@ -82,6 +82,14 @@ public class Server {
                 case DELETE_CLIMBER:
                     Integer deleteId=(Integer)request.getArgument();
                     controller.deleteClimberById(deleteId);
+                    break;
+                case UPDATE_CLIMBER:
+                    ClimberDto climber =(ClimberDto)request.getArgument();
+                    controller.updateClimber(ClimberMapper.INSTANCE.fromDto(climber));
+                    break;
+                case SAVE_CLIMBER:
+                    ClimberDto climberCreate =(ClimberDto)request.getArgument();
+                    controller.createClimber(ClimberMapper.INSTANCE.fromDto(climberCreate));
                     break;
 
             }

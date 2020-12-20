@@ -13,6 +13,16 @@ import java.util.List;
  * @author planina
  */
 public interface ClimberRepository {
-    List<Climber> getAll();
-    void deleteById(Integer id);
+
+    List<Climber> getAll() throws Exception;
+
+    void deleteById(Integer id) throws Exception;
+
+    void delete(Climber climber) throws Exception;
+
+    boolean update(Climber climber) throws Exception;
+
+    Climber findById(Integer climber) throws Exception;
+
+    public Climber insert(Climber climber) throws Exception;
 }

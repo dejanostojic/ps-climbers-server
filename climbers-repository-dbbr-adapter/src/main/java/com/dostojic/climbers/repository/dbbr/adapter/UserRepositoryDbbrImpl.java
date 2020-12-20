@@ -8,9 +8,11 @@ package com.dostojic.climbers.repository.dbbr.adapter;
 import com.dostojic.climbers.dbbr.BrokerBazePodataka;
 import com.dostojic.climbers.dbbr.BrokerBazePodataka1;
 import com.dostojic.climbers.dbbr.GeneralDObject;
-import com.dostojic.climbers.dbbr.UserGeneral;
+import com.dostojic.climbers.dbbr.improved.DbBroker;
+import static com.dostojic.climbers.dbbr.improved.QueryUtils.stringLiteral;
 import com.dostojic.climbers.domain.User;
 import com.dostojic.climbers.logic.UserRepository;
+import com.dostojic.climbers.repository.dbbr.adapter.mapper.UserMapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,20 +21,30 @@ import java.util.stream.Collectors;
  * @author planina
  */
 public class UserRepositoryDbbrImpl implements UserRepository{
-    BrokerBazePodataka broker = new BrokerBazePodataka1("db");
 
+    private DbBroker<UserDto, Long> broker;
+
+    public UserRepositoryDbbrImpl() {
+        this.broker = new DbBroker<UserDto, Long> (UserDto.class){};
+    }
+    
     @Override
-    public List<User> getAll() {
-        return broker.findRecord(new UserGeneral(), null)
+    public List<User> getAll() throws Exception {
+        return broker.loadAll()
                 .stream()
-                .map(gen -> fromGeneral((UserGeneral)gen))
+                .map(gen -> UserMapper.INSTANCE.fromDto(gen))
                 .collect(Collectors.toList());
                 
     }
     
-    
-    public User fromGeneral(UserGeneral gUser){
-        throw new RuntimeException("IMPLEMENT THIS");
+
+    @Override
+    public User findByUsernameAndPassword(String username, String password) throws Exception {
+        String where = String.format("username = %s and password = %s",
+                stringLiteral(username),
+                stringLiteral(password));
+       
+        return UserMapper.INSTANCE.fromDto(broker.loadFirst(where));
     }
     
     

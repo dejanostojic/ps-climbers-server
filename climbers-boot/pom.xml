@@ -19,9 +19,14 @@
             <artifactId>climbers-application</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>climbers-repository-in-memory-adapter</artifactId>
+            <version>${project.version}</version>
+        </dependency>-->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>climbers-repository-dbbr-adapter</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

@@ -13,5 +13,6 @@ import java.util.List;
  * @author planina
  */
 public interface UserRepository {
-    List<User> getAll();
+    List<User> getAll() throws Exception;
+    User findByUsernameAndPassword(String username, String password) throws Exception;
 }

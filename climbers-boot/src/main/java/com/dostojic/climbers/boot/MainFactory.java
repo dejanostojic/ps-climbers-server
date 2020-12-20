@@ -6,19 +6,26 @@
 package com.dostojic.climbers.boot;
 
 import com.dostojic.climbers.logic.Controller;
-import com.dostojic.climbers.repository.inmemory.adapter.ClimberRepositoryInMemoryImpl;
-import com.dostojic.climbers.repository.inmemory.adapter.CompetitionRepositoryInMemoryImpl;
-import com.dostojic.climbers.repository.inmemory.adapter.UserRepositoryInMemoryImpl;
+import com.dostojic.climbers.repository.dbbr.adapter.ClimberRepositoryDbbrImpl;
+import com.dostojic.climbers.repository.dbbr.adapter.CompetitionRepositoryDbbrImpl;
+import com.dostojic.climbers.repository.dbbr.adapter.TransactionManagerImpl;
+import com.dostojic.climbers.repository.dbbr.adapter.UserRepositoryDbbrImpl;
 
 /**
  *
  * @author planina
  */
 public class MainFactory {
-    
-    public static Controller getController(){
+
+    public static Controller getController() {
+        /*
         return new Controller(new ClimberRepositoryInMemoryImpl(),
                 new CompetitionRepositoryInMemoryImpl(), 
                 new UserRepositoryInMemoryImpl());
+         */
+        return new Controller(new TransactionManagerImpl(),
+                new ClimberRepositoryDbbrImpl(),
+                new CompetitionRepositoryDbbrImpl(),
+                new UserRepositoryDbbrImpl());
     }
 }
