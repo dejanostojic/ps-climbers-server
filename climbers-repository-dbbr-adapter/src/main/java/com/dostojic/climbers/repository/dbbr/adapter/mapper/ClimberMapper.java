@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.dostojic.climbers.swing.bff.mapper;
+package com.dostojic.climbers.repository.dbbr.adapter.mapper;
 
-import com.dostojic.climbers.common.dto.ClimberDto;
+import com.dostojic.climbers.repository.dbbr.adapter.ClimberDto;
 import com.dostojic.climbers.domain.Climber;
 import java.util.Collection;
 import java.util.List;
@@ -21,9 +21,11 @@ public interface ClimberMapper {
     
     public static ClimberMapper INSTANCE = Mappers.getMapper(ClimberMapper.class);
 
-    ClimberDto toDto(Climber climber);
-    Climber fromDto(ClimberDto climber);
-    
+    ClimberDto toDto(Climber climber); 
     List<ClimberDto> toDto(Collection<Climber> climberList);
+    
+    Climber fromDto(ClimberDto climber); 
+    List<Climber> fromDto(Collection<ClimberDto> climberList);
+    
     
 }
