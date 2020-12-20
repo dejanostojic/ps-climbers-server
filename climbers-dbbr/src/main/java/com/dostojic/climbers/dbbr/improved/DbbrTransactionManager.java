@@ -7,6 +7,7 @@ package com.dostojic.climbers.dbbr.improved;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -28,7 +29,7 @@ public class DbbrTransactionManager {
 
     static {
         try{
-            String propsFile = System.getProperty("hikariConfig", "src/test/resources/hikariConfig.properties");
+            String propsFile = System.getProperty("hikariConfig", "/hikariConfig.properties");
             HikariConfig config = new HikariConfig(propsFile);
             DS = new HikariDataSource(config);
         } catch (Exception e){
