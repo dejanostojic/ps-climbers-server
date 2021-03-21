@@ -7,7 +7,7 @@ package com.dostojic.climbers.repository.dbbr.adapter;
 
 import com.dostojic.climbers.dbbr.improved.DbBroker;
 import com.dostojic.climbers.domain.Climber;
-import com.dostojic.climbers.logic.ClimberRepository;
+import com.dostojic.climbers.repository.ClimberRepository;
 import com.dostojic.climbers.repository.dbbr.adapter.mapper.ClimberMapper;
 import java.util.List;
 import java.util.logging.Level;

@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.dostojic.climbers.logic.so.template;
+package com.dostojic.climbers.repository;
 
 /**
  *
  * @author Dejan.Ostojic
  */
-public interface GeneralSO<DomainObjectIn, DomainObjectOut> {
-    DomainObjectOut execute(DomainObjectIn domainObject) throws Exception;
+public class RouteRepository {
+    
 }

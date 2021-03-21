@@ -5,51 +5,51 @@
  */
 package com.dostojic.climbers.repository.dbbr.adapter;
 
-import java.util.Objects;
+import com.dostojic.climbers.dbbr.improved.annotation.Column;
+import com.dostojic.climbers.dbbr.improved.annotation.CompositeId;
+import com.dostojic.climbers.dbbr.improved.annotation.Table;
 
 /**
  *
  * @author Dejan.Ostojic
  */
+@Table(name = "route", autoIncrement = false)
 public class RouteDto {
     
-    private CompetitionDto competition;
-    private Integer ord;
+    
+    @CompositeId
+    private RouteCompositeId id;
+
+    @Column(name = "name", isPrimaryKey = false)
     private String name;
+    
+    @Column(name = "grade", isPrimaryKey = false)
     private String grade;
 
     public RouteDto() {
     }
 
-    public RouteDto(CompetitionDto competition, Integer ord, String name, String grade) {
-        this.competition = competition;
-        this.ord = ord;
+    public RouteDto(RouteCompositeId id, String name, String grade) {
+        this.id = id;
         this.name = name;
         this.grade = grade;
     }
 
+
+    public RouteCompositeId getId() {
+        return id;
+    }
+
+    public void setId(RouteCompositeId id) {
+        this.id = id;
+    }
+    
     public String getGrade() {
         return grade;
     }
 
     public void setGrade(String grade) {
         this.grade = grade;
-    }
-
-    public CompetitionDto getCompetition() {
-        return competition;
-    }
-
-    public void setCompetition(CompetitionDto competition) {
-        this.competition = competition;
-    }
-
-    public Integer getOrd() {
-        return ord;
-    }
-
-    public void setOrd(Integer ord) {
-        this.ord = ord;
     }
 
     public String getName() {
@@ -61,36 +61,9 @@ public class RouteDto {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 79 * hash + Objects.hashCode(this.competition);
-        hash = 79 * hash + Objects.hashCode(this.ord);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final RouteDto other = (RouteDto) obj;
-        if (!Objects.equals(this.competition, other.competition)) {
-            return false;
-        }
-        if (!Objects.equals(this.ord, other.ord)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public String toString() {
-        return "Route{" + "competition=" + competition + ", ord=" + ord + ", name=" + name + ", grade=" + grade + '}';
+        return "RouteDto{" + "id=" + id + ", name=" + name + ", grade=" + grade + '}';
     }
+
+   
 }

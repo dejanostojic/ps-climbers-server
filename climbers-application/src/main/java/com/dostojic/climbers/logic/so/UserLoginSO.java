@@ -9,8 +9,8 @@ import com.dostojic.climbers.domain.User;
 import com.dostojic.climbers.domain.valueobject.LoginCredentials;
 import com.dostojic.climbers.exception.LoginException;
 import com.dostojic.climbers.logic.TransactionManager;
-import com.dostojic.climbers.logic.UserRepository;
 import com.dostojic.climbers.logic.so.template.GeneralReportingSO;
+import com.dostojic.climbers.repository.UserRepository;
 
 /**
  * System operation for login functionality. 

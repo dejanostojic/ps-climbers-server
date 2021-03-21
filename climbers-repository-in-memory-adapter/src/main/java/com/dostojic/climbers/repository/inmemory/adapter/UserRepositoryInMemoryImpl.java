@@ -6,7 +6,7 @@
 package com.dostojic.climbers.repository.inmemory.adapter;
 
 import com.dostojic.climbers.domain.User;
-import com.dostojic.climbers.logic.UserRepository;
+import com.dostojic.climbers.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 

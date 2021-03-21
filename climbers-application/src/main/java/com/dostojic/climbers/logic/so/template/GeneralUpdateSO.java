@@ -13,7 +13,7 @@ import com.dostojic.climbers.logic.TransactionManager;
  * @param <T>
  * @param <DomainObject>
  */
-public abstract class GeneralUpdateSO<DomainObjectIn, DomainObjectOut>  implements GeneralSO {
+public abstract class GeneralUpdateSO<DomainObjectIn, DomainObjectOut>  implements GeneralSO<DomainObjectIn, DomainObjectOut> {
 
     protected final TransactionManager transactionManager;
 

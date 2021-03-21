@@ -17,6 +17,7 @@ import java.util.Objects;
 public class Competition implements Serializable {
 
     private Integer id;
+    private String name;
     private String description;
     private Date registrationOpen;
     private Date registrationClose;
@@ -27,14 +28,18 @@ public class Competition implements Serializable {
     public Competition() {
     }
 
-    public Competition(Integer id, String description, Date registrationOpen, Date registrationClose, Date eventStart) {
+    public Competition(Integer id, String name, String description, Date registrationOpen, Date registrationClose, Date eventStart, List<Route> routes, List<RegistrationFee> registrationFees) {
         this.id = id;
+        this.name = name;
         this.description = description;
         this.registrationOpen = registrationOpen;
         this.registrationClose = registrationClose;
         this.eventStart = eventStart;
+        this.routes = routes;
+        this.registrationFees = registrationFees;
     }
 
+    
     public Date getEventStart() {
         return eventStart;
     }
@@ -49,6 +54,14 @@ public class Competition implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {

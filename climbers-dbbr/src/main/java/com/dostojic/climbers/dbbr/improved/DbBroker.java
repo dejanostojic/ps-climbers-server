@@ -6,7 +6,9 @@
 package com.dostojic.climbers.dbbr.improved;
 
 import com.dostojic.climbers.dbbr.improved.annotation.Column;
+import com.dostojic.climbers.dbbr.improved.annotation.CompositeId;
 import com.dostojic.climbers.dbbr.improved.annotation.Table;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -15,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -37,15 +40,16 @@ public abstract class DbBroker<Dto, PkType> {
         this.commaSepColumnList = commaSepColumnList;
     }
 
-    private interface Col {
+    private void processMethod(Method method, Map<String, Method> getters, Map<String, Method> setters) {
+        ProcessedMethod processedName = processName(method);
+        String propertyName = processedName.getName();
+        ProcessedMethod.Type methodType = processedName.getType();
 
-        public String getColumnName();
-
-        public void resultSetToDto(ResultSet rs, TypeVariable dto, int index) throws Exception;
-
-        public void dtoToParam(TypeVariable dto, PreparedStatement statement, int paramIndex) throws Exception;
-
-        public boolean isPrimaryKey();
+        if (methodType.equals(ProcessedMethod.Type.getter)) {
+            getters.put(propertyName, method);
+        } else if (methodType.equals(ProcessedMethod.Type.setter)) {
+            setters.put(propertyName, method);
+        }    
     }
 
     private abstract class ColumnMapper {
@@ -72,10 +76,7 @@ public abstract class DbBroker<Dto, PkType> {
     protected Dto newDto() {
         try {
             return dtoClass.newInstance();
-        } catch (InstantiationException ex) {
-            Logger.getLogger(DbBroker.class.getName()).log(Level.SEVERE, null, ex);
-            throw new RuntimeException(ex);
-        } catch (IllegalAccessException ex) {
+        } catch (InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(DbBroker.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
@@ -136,6 +137,8 @@ public abstract class DbBroker<Dto, PkType> {
     private List<ColumnMapper> pkFields;
     private List<ColumnMapper> nonPkFields;
     private Method pkSeter = null;
+    private Method pkGetter = null;
+
     protected String getPkClosure() {
         return pkClosure;
     }
@@ -220,82 +223,146 @@ public abstract class DbBroker<Dto, PkType> {
         Table table = (Table) dtoType.getAnnotation(Table.class);
         setTableName(table.name());
         setAutoIncrement(table.autoIncrement());
+        System.out.println("DEBUG: annotation config: " + tableName);
 
         Method[] methods = dtoType.getMethods();
         Map<String, Method> getters = new HashMap<>();
         Map<String, Method> setters = new HashMap<>();
 
         for (Method method : methods) {
-            ProcessedMethod processedName = processName(method);
-            String propertyName = (String) processedName.getName();
-            ProcessedMethod.Type methodType = processedName.getType();
+            processMethod(method, getters, setters);
+        }
 
-            if (methodType.equals(ProcessedMethod.Type.getter)) {
-                getters.put(propertyName, method);
-            } else if (methodType.equals(ProcessedMethod.Type.setter)) {
-                setters.put(propertyName, method);
+        Optional<Field> optCompositeId = Stream.of(dtoType.getDeclaredFields())
+                .filter(field -> field.isAnnotationPresent(CompositeId.class))
+                .findFirst();
+
+         boolean hasCompositeId = optCompositeId.isPresent();
+
+        if (hasCompositeId) {
+            Field compositeId = optCompositeId.get();
+            Optional<Method> compositePkSetter = optCompositeId.map(f -> setters.get(f.getName()));
+            if (!compositePkSetter.isPresent()) {
+                throw new RuntimeException("Composite id must have setter");
+            }
+            pkSeter = compositePkSetter.get();
+            pkGetter = getters.get(compositeId.getName());
+            Optional<Field[]> compositePkFields = optCompositeId.map(f -> f.getType().getDeclaredFields());
+            if (compositePkFields.isPresent()) {
+                System.out.println("composite pk are present: " + optCompositeId.get().getType().getSimpleName());
+                for (Method method: optCompositeId.get().getType().getMethods()){
+                    processMethod(method, getters, setters);
+                }
+                
+                for (Field pkField : compositePkFields.get()) {
+                    System.out.println("checking: " + pkField.getName());
+                    
+                    if (pkField.isAnnotationPresent(Column.class)){
+                        System.out.println("checking: " + pkField.getName() + " is annotated with @Column");
+
+                        handleColumnField(pkField, getters, setters, hasCompositeId);
+                    }
+                }
+
             }
         }
 
         Stream.of(dtoType.getDeclaredFields())
                 .filter(field -> field.isAnnotationPresent(Column.class))
-                .forEach(field -> {
-                    Column column = field.getAnnotation(Column.class);
-                    final String fieldName = field.getName(); // name of field
-                    String columnName = column.name(); // name of col in db
-                    final boolean primaryKey = column.isPrimaryKey();
-                    final Class<?> type = field.getType();
-                    final Method getter = getters.get(fieldName);
-                    final Method setter = setters.get(fieldName);
-                    
-                    if (setter == null) {
-                        throw new RuntimeException("field " + fieldName + " annotated as column has no declared public setter method and can't be read from database!");
-                    }
-
-                    if (getter == null) {
-                        throw new RuntimeException("field " + fieldName + " annotated as column has no declared public getter method and can't be persisted to database!");
-                    }
-                    
-                    if (primaryKey){
-                        pkSeter = setter;
-                    }
-                    
-                    add(new ColumnMapper(columnName) {
-
-                        @Override
-                        public boolean isPrimaryKey() {
-                            return primaryKey;
-                        }
-
-                        @Override
-                        public void resultSetToDto(ResultSet rs, Dto dto, int index) throws Exception {
-
-                            try {
-                                System.out.println("field name: " + fieldName);
-                                if (setter.getParameterTypes()[0].isAssignableFrom(type)) {
-                                    setter.invoke(dto, rs.getObject(index, type));
-                                }
-                            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                                Logger.getLogger(DbBroker.class.getName()).log(Level.SEVERE, null, ex);
-                                throw new RuntimeException(String.format("error reading from database %s.%s", tableName, columnName), ex);
-                            }
-                        }
-
-                        @Override
-                        public void dtoToParam(Dto dto, PreparedStatement statement, int paramIndex) throws Exception {
-
-                            try {
-                                statement.setObject(paramIndex, getter.invoke(dto));
-                            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                                Logger.getLogger(DbBroker.class.getName()).log(Level.SEVERE, null, ex);
-                                throw new RuntimeException(String.format("error setting to database %s.%s", tableName, columnName), ex);
-                            }
-                        }
-
-                    });
-
-                });
+                .forEach(field -> handleColumnField(field, getters, setters, hasCompositeId));
     }
+
+    private void handleColumnField(Field field, Map<String, Method> getters, Map<String, Method> setters, boolean hasCompositePk) {
+
+        Column column = field.getAnnotation(Column.class);
+        final String fieldName = field.getName(); // name of field
+        String columnName = column.name(); // name of col in db
+        final boolean primaryKey = column.isPrimaryKey();
+        final Class<?> type = field.getType();
+        final Method getter = getters.get(fieldName);
+        final Method setter = setters.get(fieldName);
+
+        if (setter == null) {
+            throw new RuntimeException("field " + fieldName + " annotated as column has no declared public setter method and can't be read from database!");
+        }
+
+        if (getter == null) {
+            throw new RuntimeException("field " + fieldName + " annotated as column has no declared public getter method and can't be persisted to database!");
+        }
+
+        if (primaryKey && !hasCompositePk) {
+            pkSeter = setter;
+        }
+
+        add(new ColumnMapper(columnName) {
+
+            @Override
+            public boolean isPrimaryKey() {
+                return primaryKey;
+            }
+
+            @Override
+            public void resultSetToDto(ResultSet rs, Dto dto, int index) throws Exception {
+
+                try {
+                    // PROBLEM WHEN USING @CompositeId, it is no longer Dto for getter
+                    if (hasCompositePk && primaryKey){
+                        // get composite id object
+                        Object compositeId = pkGetter.invoke(dto);
+                        
+                        // if null create new instance
+                        if(compositeId == null){
+                            compositeId = pkGetter.getReturnType().newInstance();
+                        }
+                        // set value to the composite id field
+                        setter.invoke(compositeId, rs.getObject(index, type));
+                        
+                        // set composite id to the main object
+                        pkSeter.invoke(dto, compositeId);
+
+                    }else{
+                        System.out.println("field name: " + fieldName);
+                        if (setter.getParameterTypes()[0].isAssignableFrom(type)) {
+                            setter.invoke(dto, rs.getObject(index, type));
+                        }
+                    }
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                    Logger.getLogger(DbBroker.class.getName()).log(Level.SEVERE, null, ex);
+                    
+                    throw new RuntimeException(String.format("error reading from database %s.%s", tableName, columnName)
+                            .concat(" Trying to set " + setter.getDeclaringClass().getName())
+                            .concat(". Fetched from DB " + rs.getObject(index))
+                            .concat(". Expected type: " + type.getName()), ex);
+                }
+            }
+
+            @Override
+            public void dtoToParam(Dto dto, PreparedStatement statement, int paramIndex) throws Exception {
+
+                try { // TODO: PROBLEM WHEN USING @CompositeId, it is no longer Dto for getter
+                    if (hasCompositePk && primaryKey){
+                        System.out.println("setting to @CompositeId");
+                        // if it has composite pk and it is pk field than get composite pk and set value
+                        Object compositeId = pkGetter.invoke(dto);
+                        if(compositeId == null){
+                            compositeId = pkGetter.getReturnType().newInstance();
+                            pkSeter.invoke(dto, compositeId);
+                        }
+                        
+                        statement.setObject(paramIndex, getter.invoke(pkGetter.invoke(dto)));
+                    }else{
+                        statement.setObject(paramIndex, getter.invoke(dto));
+                    }
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                    Logger.getLogger(DbBroker.class.getName()).log(Level.SEVERE, null, ex);
+                    throw new RuntimeException(String.format("error setting to database %s.%s", tableName, columnName), ex);
+                }
+            }
+
+        });
+
+    }
+
     Class<Dto> dtoClass;
 
     public DbBroker(Class<Dto> dtoClass) {
@@ -582,6 +649,8 @@ public abstract class DbBroker<Dto, PkType> {
                 ? tm.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)
                 : tm.prepareStatement(insertSql);) {
             for (int i = 0; i < columnCount; i++) {
+                System.out.println("debug: inserting column: " + i);
+                System.out.println("debug: inserting column: " + fields.get(i).columnName);
                 fields.get(i).dtoToParam(dto, insertStatement, i + 1);
             }
             insertStatement.executeUpdate();

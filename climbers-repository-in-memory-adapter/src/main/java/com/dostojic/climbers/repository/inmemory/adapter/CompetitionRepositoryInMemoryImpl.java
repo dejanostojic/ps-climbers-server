@@ -6,7 +6,8 @@
 package com.dostojic.climbers.repository.inmemory.adapter;
 
 import com.dostojic.climbers.domain.Competition;
-import com.dostojic.climbers.logic.CompetitionRepository;
+import com.dostojic.climbers.domain.valueobject.CompetitionSearchCriteria;
+import com.dostojic.climbers.repository.CompetitionRepository;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,10 +23,6 @@ public class CompetitionRepositoryInMemoryImpl implements CompetitionRepository 
 
     public CompetitionRepositoryInMemoryImpl() {
         competitions = new ArrayList<>();
-        competitions.add(new Competition(1, "Bolder fest Vrsac", 
-                java.util.Date.from(Instant.now()), 
-                java.util.Date.from(Instant.now()), 
-        java.util.Date.from(Instant.now())));
     }
 
     public List<Competition> getCompetitions() {
@@ -33,8 +30,23 @@ public class CompetitionRepositoryInMemoryImpl implements CompetitionRepository 
     }
 
     @Override
-    public List<Competition> getAll() {
-        return competitions;
+    public Competition insert(Competition competition) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Competition update(Competition competition) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Competition> searchCompetitions(CompetitionSearchCriteria searchCriteria) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Competition findById(Integer id) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

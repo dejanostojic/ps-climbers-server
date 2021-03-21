@@ -6,7 +6,7 @@
 package com.dostojic.climbers.logic.so.climber;
 
 import com.dostojic.climbers.domain.Climber;
-import com.dostojic.climbers.logic.ClimberRepository;
+import com.dostojic.climbers.repository.ClimberRepository;
 import com.dostojic.climbers.logic.TransactionManager;
 import com.dostojic.climbers.logic.so.template.GeneralUpdateSO;
 
