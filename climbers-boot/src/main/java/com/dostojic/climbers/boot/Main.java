@@ -5,7 +5,8 @@
  */
 package com.dostojic.climbers.boot;
 
-import com.dostojic.climbers.swing.bff.Server;
+import com.dostojic.climbers.swing.bff.FServer;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -13,7 +14,8 @@ import com.dostojic.climbers.swing.bff.Server;
  */
 public class Main {
     public static void main(String[] args) {
-        
-        new Server(MainFactory.getController()).startServer();
+        SwingUtilities.invokeLater(()->
+            new FServer(MainFactory.getController()).setVisible(true)
+        );
     }
 }
