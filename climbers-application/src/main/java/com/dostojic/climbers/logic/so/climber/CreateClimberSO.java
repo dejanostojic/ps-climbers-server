@@ -25,11 +25,13 @@ public class CreateClimberSO extends GeneralUpdateSO<Climber, Climber> {
 
     @Override
     protected void checkPrecondition(Climber climber) throws Exception {
-        System.out.println("TODO ADD PRECONDITINOS FOR INSERT");
+        new ClimberValidator().validate(climber);
     }
 
     @Override
     protected Climber executeOperation(Climber climber) throws Exception {
+        System.out.println("DEBUG: Inserting climber: " + climber);
+
         return climberRepository.insert(climber);
     }
 

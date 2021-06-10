@@ -6,6 +6,7 @@
 package com.dostojic.climbers.repository.inmemory.adapter;
 
 import com.dostojic.climbers.domain.Climber;
+import com.dostojic.climbers.domain.valueobject.ClimberSearchCriteria;
 import com.dostojic.climbers.repository.ClimberRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +29,7 @@ public class ClimberRepositoryInMemoryImpl implements ClimberRepository {
     public List<Climber> getClimbers() {
         return climbers;
     }
-
-    @Override
-    public List<Climber> getAll() {
-        return climbers;
-    }
+    
 
     @Override
     public void deleteById(Integer id) {
@@ -59,6 +56,11 @@ public class ClimberRepositoryInMemoryImpl implements ClimberRepository {
 
     @Override
     public Climber insert(Climber climber) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Climber> searchClimbers(ClimberSearchCriteria searchCriteria) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

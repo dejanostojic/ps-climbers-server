@@ -6,15 +6,20 @@
 package com.dostojic.climbers.repository;
 
 import com.dostojic.climbers.domain.RegistrationFee;
+import java.util.List;
 
 /**
  *
  * @author Dejan.Ostojic
  */
 public interface RegistrationFeeRepository {
-    
-    RegistrationFee save(RegistrationFee registrationFee) throws Exception;
-    
+
+    RegistrationFee insert(RegistrationFee route) throws Exception;
+
     RegistrationFee update(RegistrationFee registrationFee) throws Exception;
+
+    void delete(RegistrationFee route) throws Exception;
+
+    public List<RegistrationFee> findByCompetitionId(Integer id) throws Exception;
 
 }

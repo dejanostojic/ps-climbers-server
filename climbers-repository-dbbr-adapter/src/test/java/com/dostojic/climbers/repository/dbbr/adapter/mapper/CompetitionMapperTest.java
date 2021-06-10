@@ -6,12 +6,14 @@
 package com.dostojic.climbers.repository.dbbr.adapter.mapper;
 
 import com.dostojic.climbers.domain.Competition;
+import com.dostojic.climbers.domain.Registration;
 import com.dostojic.climbers.domain.RegistrationFee;
 import com.dostojic.climbers.domain.Route;
 import com.dostojic.climbers.repository.dbbr.adapter.CompetitionDto;
 import com.dostojic.climbers.repository.dbbr.adapter.RouteCompositeId;
 import com.dostojic.climbers.repository.dbbr.adapter.RouteDto;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import org.junit.Ignore;
@@ -85,7 +87,8 @@ public class CompetitionMapperTest {
     
     private Competition createCompetition(){
         return new Competition(COMPETITION_ID, COMP_NAME, COMP_DESC, COMP_REG_OPEN,
-        COMP_REG_CLOSE, COMP_REG_EVENT_START, Arrays.asList(createRoute1()), Arrays.asList(createRegistrationFee1()) );
+        COMP_REG_CLOSE, COMP_REG_EVENT_START, Arrays.asList(createRoute1()), 
+                Arrays.asList(createRegistrationFee1()), new ArrayList<>() );
     }
     
     private RouteDto createRouteDto1(){

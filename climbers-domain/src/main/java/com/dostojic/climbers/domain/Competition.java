@@ -24,11 +24,13 @@ public class Competition implements Serializable {
     private Date eventStart;
     private List<Route> routes;
     private List<RegistrationFee> registrationFees;
+    private List<Registration> registrations;
 
     public Competition() {
     }
 
-    public Competition(Integer id, String name, String description, Date registrationOpen, Date registrationClose, Date eventStart, List<Route> routes, List<RegistrationFee> registrationFees) {
+    public Competition(Integer id, String name, String description, Date registrationOpen,Date registrationClose,
+            Date eventStart, List<Route> routes, List<RegistrationFee> registrationFees, List<Registration> registrations) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -37,6 +39,7 @@ public class Competition implements Serializable {
         this.eventStart = eventStart;
         this.routes = routes;
         this.registrationFees = registrationFees;
+        this.registrations = registrations;
     }
 
     
@@ -104,6 +107,16 @@ public class Competition implements Serializable {
         this.registrationFees = registrationFees;
     }
 
+    public List<Registration> getRegistrations() {
+        return registrations;
+    }
+
+    public void setRegistrations(List<Registration> registrations) {
+        this.registrations = registrations;
+    }
+
+    
+    
     @Override
     public int hashCode() {
         int hash = 7;

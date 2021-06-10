@@ -10,12 +10,13 @@ import com.dostojic.climbers.repository.ClimberRepository;
 import com.dostojic.climbers.domain.Climber;
 import com.dostojic.climbers.domain.Competition;
 import com.dostojic.climbers.domain.User;
+import com.dostojic.climbers.domain.valueobject.ClimberSearchCriteria;
 import com.dostojic.climbers.domain.valueobject.CompetitionSearchCriteria;
 import com.dostojic.climbers.domain.valueobject.LoginCredentials;
 import com.dostojic.climbers.logic.so.UserLoginSO;
 import com.dostojic.climbers.logic.so.climber.CreateClimberSO;
 import com.dostojic.climbers.logic.so.climber.DeleteClimberSO;
-import com.dostojic.climbers.logic.so.climber.GetAllClimbersSO;
+import com.dostojic.climbers.logic.so.climber.SearchClimbers;
 import com.dostojic.climbers.logic.so.climber.GetClimberDetailsSO;
 import com.dostojic.climbers.logic.so.climber.UpdateClimberSO;
 import com.dostojic.climbers.logic.so.competition.GetCompetitionDetailsSO;
@@ -23,6 +24,7 @@ import com.dostojic.climbers.logic.so.competition.SaveCompetition;
 import com.dostojic.climbers.logic.so.competition.SearchCompetitions;
 import com.dostojic.climbers.logic.so.competition.UpdateCompetition;
 import com.dostojic.climbers.logic.so.template.GeneralSO;
+import com.dostojic.climbers.repository.RouteRepository;
 import com.dostojic.climbers.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +38,7 @@ public class Controller {
     private final GeneralSO<LoginCredentials, User> userLoginSO;
 
     // Climber related system operations
-    private final GetAllClimbersSO allClimbersSO;
+    private final SearchClimbers searchClimbers;
     private final GetClimberDetailsSO climberDetailsSO;
     private final UpdateClimberSO updateClimberSo;
     private final DeleteClimberSO deleteClimberSO;
@@ -48,30 +50,25 @@ public class Controller {
     private final SearchCompetitions searchCompetitions;
     private final GetCompetitionDetailsSO competitionDetails;
 
-    public Controller(TransactionManager transactionManager, ClimberRepository climberRepository, 
-            CompetitionRepository competitionRepository, UserRepository userRepository) {
-        
-        this.userLoginSO = new UserLoginSO(transactionManager, userRepository);
-        // Climber related system operations
-        this.allClimbersSO = new GetAllClimbersSO(transactionManager, climberRepository);
-        this.climberDetailsSO = new GetClimberDetailsSO(transactionManager, climberRepository);
-        this.updateClimberSo = new UpdateClimberSO(transactionManager, climberRepository);
-        this.deleteClimberSO = new DeleteClimberSO(transactionManager, climberRepository);
-        this.createClimberSO = new CreateClimberSO(transactionManager, climberRepository);
-        
-        // competition relatedSo
-        this.saveCompetitionSO = new SaveCompetition(transactionManager, competitionRepository);
-        this.updateCompetition = new UpdateCompetition(transactionManager, competitionRepository);
-        this.searchCompetitions = new SearchCompetitions(transactionManager, competitionRepository);
-        this.competitionDetails = new GetCompetitionDetailsSO(transactionManager, competitionRepository);
+    public Controller(GeneralSO<LoginCredentials, User> userLoginSO, SearchClimbers searchClimbers, GetClimberDetailsSO climberDetailsSO, UpdateClimberSO updateClimberSo, DeleteClimberSO deleteClimberSO, CreateClimberSO createClimberSO, SaveCompetition saveCompetitionSO, UpdateCompetition updateCompetition, SearchCompetitions searchCompetitions, GetCompetitionDetailsSO competitionDetails) {
+        this.userLoginSO = userLoginSO;
+        this.searchClimbers = searchClimbers;
+        this.climberDetailsSO = climberDetailsSO;
+        this.updateClimberSo = updateClimberSo;
+        this.deleteClimberSO = deleteClimberSO;
+        this.createClimberSO = createClimberSO;
+        this.saveCompetitionSO = saveCompetitionSO;
+        this.updateCompetition = updateCompetition;
+        this.searchCompetitions = searchCompetitions;
+        this.competitionDetails = competitionDetails;
     }
-
+    
     public User login(LoginCredentials credentials) throws Exception {
         return userLoginSO.execute(credentials);
     }
     
-    public List<Climber> getAllClimbers() throws Exception{
-        return allClimbersSO.execute(null);
+    public List<Climber> searchClimbers(ClimberSearchCriteria searchCritera) throws Exception{
+        return searchClimbers.execute(searchCritera);
     }
     
     public Climber findClimberById(Integer id) throws Exception{

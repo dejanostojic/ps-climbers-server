@@ -7,6 +7,7 @@ package com.dostojic.climbers.repository.dbbr.adapter;
 
 import com.dostojic.climbers.dbbr.improved.DbBroker;
 import com.dostojic.climbers.domain.Competition;
+import com.dostojic.climbers.domain.Registration;
 import com.dostojic.climbers.domain.RegistrationFee;
 import com.dostojic.climbers.domain.Route;
 import com.dostojic.climbers.domain.User;
@@ -32,7 +33,8 @@ public class RouteRepositoryTest {
         transactionManagerImpl.startTransaction();
         CompetitionRepositoryDbbrImpl competitionRepositoryDbbrImpl = new CompetitionRepositoryDbbrImpl();
 
-        Competition c = new Competition(1, "name", "desc", new Date(), new Date(), new Date(), new ArrayList<Route>(), new ArrayList<RegistrationFee>());
+        Competition c = new Competition(1, "name", "desc", new Date(), new Date(), new Date(), new ArrayList<Route>(),
+                new ArrayList<RegistrationFee>(), new ArrayList<Registration>());
         c.setRoutes(Arrays.asList(new Route(c, 1, "1", "1"), new Route(c, 2, "2", "2+")));
         
         competitionRepositoryDbbrImpl.insert(c);

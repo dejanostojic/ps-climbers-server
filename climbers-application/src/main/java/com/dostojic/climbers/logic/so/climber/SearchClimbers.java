@@ -6,6 +6,7 @@
 package com.dostojic.climbers.logic.so.climber;
 
 import com.dostojic.climbers.domain.Climber;
+import com.dostojic.climbers.domain.valueobject.ClimberSearchCriteria;
 import com.dostojic.climbers.repository.ClimberRepository;
 import com.dostojic.climbers.logic.TransactionManager;
 import com.dostojic.climbers.logic.so.template.GeneralReportingSO;
@@ -15,18 +16,18 @@ import java.util.List;
  *
  * @author Dejan.Ostojic
  */
-public class GetAllClimbersSO extends GeneralReportingSO<Void, List<Climber>>{
+public class SearchClimbers extends GeneralReportingSO<ClimberSearchCriteria, List<Climber>>{
     private ClimberRepository climberRepository;
     
-    public GetAllClimbersSO(TransactionManager transactionManager, ClimberRepository climberRepository) {
+    public SearchClimbers(TransactionManager transactionManager, ClimberRepository climberRepository) {
         super(transactionManager);
         this.climberRepository = climberRepository;
     }
 
 
     @Override
-    protected List<Climber> executeOperation(Void domainObject) throws Exception {
-        return climberRepository.getAll();
+    protected List<Climber> executeOperation(ClimberSearchCriteria searchCriteria) throws Exception {
+        return climberRepository.searchClimbers(searchCriteria);
     }
     
 }

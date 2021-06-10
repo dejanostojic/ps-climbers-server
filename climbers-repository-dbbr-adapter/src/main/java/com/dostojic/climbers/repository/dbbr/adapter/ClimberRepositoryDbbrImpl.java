@@ -6,7 +6,9 @@
 package com.dostojic.climbers.repository.dbbr.adapter;
 
 import com.dostojic.climbers.dbbr.improved.DbBroker;
+import com.dostojic.climbers.dbbr.improved.QueryUtils;
 import com.dostojic.climbers.domain.Climber;
+import com.dostojic.climbers.domain.valueobject.ClimberSearchCriteria;
 import com.dostojic.climbers.repository.ClimberRepository;
 import com.dostojic.climbers.repository.dbbr.adapter.mapper.ClimberMapper;
 import java.util.List;
@@ -23,9 +25,21 @@ public class ClimberRepositoryDbbrImpl implements ClimberRepository {
     };
     private ClimberMapper mapper = ClimberMapper.INSTANCE;
 
+    
     @Override
-    public List<Climber> getAll() throws Exception {
-        return mapper.fromDto(dbbr.loadAll());
+    public List<Climber> searchClimbers(ClimberSearchCriteria searchCriteria) throws Exception {
+        StringBuilder where = new StringBuilder("true");
+        
+       if (searchCriteria.getFirstName()!= null && !searchCriteria.getFirstName().isEmpty()){
+           where.append(" and first_name like").append(QueryUtils.mySqlLikeLiteral(searchCriteria.getFirstName()));
+        }
+       
+        
+       if (searchCriteria.getLastName()!= null && !searchCriteria.getLastName().isEmpty()){
+           where.append(" and last_name like").append(QueryUtils.mySqlLikeLiteral(searchCriteria.getLastName()));
+        }
+       
+        return mapper.fromDto(dbbr.loadList(where.toString(), "last_name, first_name"));
     }
 
     @Override

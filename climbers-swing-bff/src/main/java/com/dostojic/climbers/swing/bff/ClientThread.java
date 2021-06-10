@@ -9,6 +9,7 @@ import com.dostojic.climbers.common.communication.Request;
 import com.dostojic.climbers.common.communication.Response;
 import com.dostojic.climbers.common.communication.Sender;
 import com.dostojic.climbers.common.dto.ClimberDto;
+import com.dostojic.climbers.common.dto.ClimberSearchCriteriaDto;
 import com.dostojic.climbers.common.dto.CompetitionDto;
 import com.dostojic.climbers.common.dto.CompetitionSearchCriteriaDto;
 import com.dostojic.climbers.common.dto.LoginCredentialsDto;
@@ -85,9 +86,13 @@ public class ClientThread extends Thread {
                                 controller.login(
                                         LoginCredentialsMapper.INSTANCE.fromDto(loginCredentials))));
                         break;
-                    case GET_ALL_CLIMBERS:
-                        response.setResult(ClimberMapper.INSTANCE.toDto(
-                                controller.getAllClimbers()));
+                    case SEARCH_CLIMBERS:
+                        ClimberSearchCriteriaDto climberSearchCriteriaDto = (ClimberSearchCriteriaDto) request.getArgument();
+                        response.setResult(
+                                controller.searchClimbers(ClimberMapper.INSTANCE.toSearchCriteria(climberSearchCriteriaDto))
+                                        .stream()
+                                        .map(ClimberMapper.INSTANCE::toDto)
+                                        .collect(toList()));
                         break;
                     case FIND_CLIMBER:
                         Integer id = (Integer) request.getArgument();
@@ -111,7 +116,8 @@ public class ClientThread extends Thread {
                         break;
                     case SAVE_CLIMBER:
                         ClimberDto climberCreate = (ClimberDto) request.getArgument();
-                        controller.createClimber(ClimberMapper.INSTANCE.fromDto(climberCreate));
+                        Climber savedClimber = controller.createClimber(ClimberMapper.INSTANCE.fromDto(climberCreate));
+                        response.setResult(ClimberMapper.INSTANCE.toDto(savedClimber));    
                         break;
                     case SAVE_COMPETITION:
                         CompetitionDto competitionCreate = (CompetitionDto) request.getArgument();

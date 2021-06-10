@@ -6,6 +6,7 @@
 package com.dostojic.climbers.repository;
 
 import com.dostojic.climbers.domain.Climber;
+import com.dostojic.climbers.domain.valueobject.ClimberSearchCriteria;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
  */
 public interface ClimberRepository {
 
-    List<Climber> getAll() throws Exception;
+    List<Climber> searchClimbers(ClimberSearchCriteria searchCriteria) throws Exception;
 
     void deleteById(Integer id) throws Exception;
 
