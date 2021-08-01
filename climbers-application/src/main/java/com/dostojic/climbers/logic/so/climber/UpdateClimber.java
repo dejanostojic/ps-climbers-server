@@ -5,22 +5,23 @@
  */
 package com.dostojic.climbers.logic.so.climber;
 
+import com.dostojic.climbers.logic.so.template.GeneralUpdateSO;
 import com.dostojic.climbers.domain.Climber;
 import com.dostojic.climbers.repository.ClimberRepository;
 import com.dostojic.climbers.logic.TransactionManager;
-import com.dostojic.climbers.logic.so.template.GeneralUpdateSO;
 
 /**
  *
  * @author Dejan.Ostojic
  */
-public class CreateClimberSO extends GeneralUpdateSO<Climber, Climber> {
+public class UpdateClimber extends GeneralUpdateSO<Climber, Boolean> {
 
-    private final ClimberRepository climberRepository;
+    ClimberRepository climberRepository;
 
-    public CreateClimberSO(TransactionManager transactionManager, ClimberRepository climberRepository) {
+    public UpdateClimber(TransactionManager transactionManager, ClimberRepository climberRepository) {
         super(transactionManager);
         this.climberRepository = climberRepository;
+
     }
 
     @Override
@@ -29,10 +30,9 @@ public class CreateClimberSO extends GeneralUpdateSO<Climber, Climber> {
     }
 
     @Override
-    protected Climber executeOperation(Climber climber) throws Exception {
-        System.out.println("DEBUG: Inserting climber: " + climber);
-
-        return climberRepository.insert(climber);
+    protected Boolean executeOperation(Climber climber) throws Exception {
+        System.out.println("DEBUG: Updating climber: " + climber);
+        return climberRepository.update(climber);
     }
 
 }

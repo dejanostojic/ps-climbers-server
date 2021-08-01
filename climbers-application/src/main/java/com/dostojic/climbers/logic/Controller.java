@@ -14,11 +14,11 @@ import com.dostojic.climbers.domain.valueobject.ClimberSearchCriteria;
 import com.dostojic.climbers.domain.valueobject.CompetitionSearchCriteria;
 import com.dostojic.climbers.domain.valueobject.LoginCredentials;
 import com.dostojic.climbers.logic.so.UserLoginSO;
-import com.dostojic.climbers.logic.so.climber.CreateClimberSO;
-import com.dostojic.climbers.logic.so.climber.DeleteClimberSO;
+import com.dostojic.climbers.logic.so.climber.CreateClimber;
+import com.dostojic.climbers.logic.so.climber.DeleteClimber;
 import com.dostojic.climbers.logic.so.climber.SearchClimbers;
-import com.dostojic.climbers.logic.so.climber.GetClimberDetailsSO;
-import com.dostojic.climbers.logic.so.climber.UpdateClimberSO;
+import com.dostojic.climbers.logic.so.climber.FindClimber;
+import com.dostojic.climbers.logic.so.climber.UpdateClimber;
 import com.dostojic.climbers.logic.so.competition.GetCompetitionDetailsSO;
 import com.dostojic.climbers.logic.so.competition.SaveCompetition;
 import com.dostojic.climbers.logic.so.competition.SearchCompetitions;
@@ -39,10 +39,10 @@ public class Controller {
 
     // Climber related system operations
     private final SearchClimbers searchClimbers;
-    private final GetClimberDetailsSO climberDetailsSO;
-    private final UpdateClimberSO updateClimberSo;
-    private final DeleteClimberSO deleteClimberSO;
-    private final CreateClimberSO createClimberSO;
+    private final FindClimber climberDetailsSO;
+    private final UpdateClimber updateClimberSo;
+    private final DeleteClimber deleteClimberSO;
+    private final CreateClimber createClimberSO;
 
     // Competition related SO
     private final SaveCompetition saveCompetitionSO;
@@ -50,7 +50,7 @@ public class Controller {
     private final SearchCompetitions searchCompetitions;
     private final GetCompetitionDetailsSO competitionDetails;
 
-    public Controller(GeneralSO<LoginCredentials, User> userLoginSO, SearchClimbers searchClimbers, GetClimberDetailsSO climberDetailsSO, UpdateClimberSO updateClimberSo, DeleteClimberSO deleteClimberSO, CreateClimberSO createClimberSO, SaveCompetition saveCompetitionSO, UpdateCompetition updateCompetition, SearchCompetitions searchCompetitions, GetCompetitionDetailsSO competitionDetails) {
+    public Controller(GeneralSO<LoginCredentials, User> userLoginSO, SearchClimbers searchClimbers, FindClimber climberDetailsSO, UpdateClimber updateClimberSo, DeleteClimber deleteClimberSO, CreateClimber createClimberSO, SaveCompetition saveCompetitionSO, UpdateCompetition updateCompetition, SearchCompetitions searchCompetitions, GetCompetitionDetailsSO competitionDetails) {
         this.userLoginSO = userLoginSO;
         this.searchClimbers = searchClimbers;
         this.climberDetailsSO = climberDetailsSO;

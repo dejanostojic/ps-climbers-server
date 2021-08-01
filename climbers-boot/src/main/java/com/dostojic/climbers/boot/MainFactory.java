@@ -8,11 +8,11 @@ package com.dostojic.climbers.boot;
 import com.dostojic.climbers.logic.Controller;
 import com.dostojic.climbers.logic.TransactionManager;
 import com.dostojic.climbers.logic.so.UserLoginSO;
-import com.dostojic.climbers.logic.so.climber.CreateClimberSO;
-import com.dostojic.climbers.logic.so.climber.DeleteClimberSO;
-import com.dostojic.climbers.logic.so.climber.GetClimberDetailsSO;
+import com.dostojic.climbers.logic.so.climber.CreateClimber;
+import com.dostojic.climbers.logic.so.climber.DeleteClimber;
+import com.dostojic.climbers.logic.so.climber.FindClimber;
 import com.dostojic.climbers.logic.so.climber.SearchClimbers;
-import com.dostojic.climbers.logic.so.climber.UpdateClimberSO;
+import com.dostojic.climbers.logic.so.climber.UpdateClimber;
 import com.dostojic.climbers.logic.so.competition.GetCompetitionDetailsSO;
 import com.dostojic.climbers.logic.so.competition.SaveCompetition;
 import com.dostojic.climbers.logic.so.competition.SearchCompetitions;
@@ -57,10 +57,10 @@ public class MainFactory {
 //                new UserRepositoryDbbrImpl());
         return new Controller(new UserLoginSO(tm, userRepository),
                 new SearchClimbers(tm, climberRepository),
-                new GetClimberDetailsSO(tm, climberRepository),
-                new UpdateClimberSO(tm, climberRepository),
-                new DeleteClimberSO(tm, climberRepository),
-                new CreateClimberSO(tm, climberRepository),
+                new FindClimber(tm, climberRepository),
+                new UpdateClimber(tm, climberRepository),
+                new DeleteClimber(tm, climberRepository),
+                new CreateClimber(tm, climberRepository),
                 new SaveCompetition(tm, competitionRepository, routeRepository, registrationFeeRepository, registrationRepository),
                 new UpdateCompetition(tm, competitionRepository, routeRepository, registrationFeeRepository, registrationRepository),
                 new SearchCompetitions(tm, competitionRepository),
