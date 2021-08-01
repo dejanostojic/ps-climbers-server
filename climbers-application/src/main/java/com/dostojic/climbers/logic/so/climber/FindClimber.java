@@ -6,7 +6,7 @@
 package com.dostojic.climbers.logic.so.climber;
 
 import com.dostojic.climbers.domain.Climber;
-import com.dostojic.climbers.logic.ClimberRepository;
+import com.dostojic.climbers.repository.ClimberRepository;
 import com.dostojic.climbers.logic.TransactionManager;
 import com.dostojic.climbers.logic.so.template.GeneralReportingSO;
 import java.util.List;
@@ -16,11 +16,11 @@ import java.util.Optional;
  *
  * @author Dejan.Ostojic
  */
-public class GetClimberDetailsSO extends GeneralReportingSO<Integer, Climber>{
+public class FindClimber extends GeneralReportingSO<Integer, Climber>{
 
     private final ClimberRepository climberRepository;
     
-    public GetClimberDetailsSO(TransactionManager transactionManager, ClimberRepository climberRepository) {
+    public FindClimber(TransactionManager transactionManager, ClimberRepository climberRepository) {
         super(transactionManager);
         this.climberRepository = climberRepository;
     }

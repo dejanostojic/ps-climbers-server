@@ -17,24 +17,32 @@ import java.util.Objects;
 public class Competition implements Serializable {
 
     private Integer id;
+    private String name;
     private String description;
     private Date registrationOpen;
     private Date registrationClose;
     private Date eventStart;
     private List<Route> routes;
     private List<RegistrationFee> registrationFees;
+    private List<Registration> registrations;
 
     public Competition() {
     }
 
-    public Competition(Integer id, String description, Date registrationOpen, Date registrationClose, Date eventStart) {
+    public Competition(Integer id, String name, String description, Date registrationOpen,Date registrationClose,
+            Date eventStart, List<Route> routes, List<RegistrationFee> registrationFees, List<Registration> registrations) {
         this.id = id;
+        this.name = name;
         this.description = description;
         this.registrationOpen = registrationOpen;
         this.registrationClose = registrationClose;
         this.eventStart = eventStart;
+        this.routes = routes;
+        this.registrationFees = registrationFees;
+        this.registrations = registrations;
     }
 
+    
     public Date getEventStart() {
         return eventStart;
     }
@@ -49,6 +57,14 @@ public class Competition implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -91,6 +107,16 @@ public class Competition implements Serializable {
         this.registrationFees = registrationFees;
     }
 
+    public List<Registration> getRegistrations() {
+        return registrations;
+    }
+
+    public void setRegistrations(List<Registration> registrations) {
+        this.registrations = registrations;
+    }
+
+    
+    
     @Override
     public int hashCode() {
         int hash = 7;

@@ -69,6 +69,25 @@
     </dependencies>
     
     <build>
+        <pluginManagement>  
+           <plugins>  
+               <plugin>  
+                   <groupId>org.liquibase</groupId>  
+                   <artifactId>liquibase-maven-plugin</artifactId>  
+                   <version>3.8.0</version>  
+                   <configuration>  
+                       <propertyFile>${liquibase.propertyFile}</propertyFile>  
+                   </configuration>  
+                   <dependencies>  
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>8.0.22</version>
+                    </dependency> 
+                 </dependencies>  
+               </plugin>  
+           </plugins>  
+       </pluginManagement>  
         <plugins>
             <!-- JUnit 5 requires Surefire version 2.22.0 or higher -->
             <plugin>
@@ -100,6 +119,6 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <junit.jupiter.version>5.7.0</junit.jupiter.version>
-
+        <liquibase.propertyFile>liquibase/liquibase.properties</liquibase.propertyFile>
     </properties>
 </project>

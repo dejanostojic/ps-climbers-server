@@ -7,6 +7,7 @@ package com.dostojic.climbers.repository.dbbr.adapter;
 
 import com.dostojic.climbers.dbbr.improved.DbbrTransactionManager;
 import com.dostojic.climbers.domain.User;
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -49,6 +50,8 @@ public class UserRepositoryDbbrImplTest {
     
     @BeforeAll
     private static void beforeAll(){
+//        System.setProperty("hikariConfig", new File("src/test/resources/hikariConfig.properties").getAbsolutePath()); 
+
         transactionManagerImpl = new TransactionManagerImpl();
         userRepositoryDbbrImpl = new UserRepositoryDbbrImpl();
     }

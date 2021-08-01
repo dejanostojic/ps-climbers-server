@@ -15,11 +15,11 @@ import java.sql.Date;
  *
  * @author Dejan.Ostojic
  */
-@Table(name = "registration_fee", autoIncrement = false)
-public class RegistrationFeeDto {
+@Table(name = "registration", autoIncrement = false)
+public class RegistrationDto {
     
     @CompositeId
-    private RegistrationFeeCompositeId id;
+    private RegistrationCompositeId id;
     private CompetitionDto competition;
     
     @Column(name = "name")
@@ -34,14 +34,14 @@ public class RegistrationFeeDto {
     @Column(name = "end_date")
     private Date endDate;
 
-    public RegistrationFeeDto() {
+    public RegistrationDto() {
     }
 
-    public RegistrationFeeCompositeId getId() {
+    public RegistrationCompositeId getId() {
         return id;
     }
 
-    public void setId(RegistrationFeeCompositeId id) {
+    public void setId(RegistrationCompositeId id) {
         this.id = id;
     }
 

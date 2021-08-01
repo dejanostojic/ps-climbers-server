@@ -5,8 +5,9 @@
  */
 package com.dostojic.climbers.repository.dbbr.adapter;
 
+import com.dostojic.climbers.dbbr.improved.annotation.Column;
 import com.dostojic.climbers.dbbr.improved.annotation.Table;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,33 +15,58 @@ import java.util.Objects;
  *
  * @author Dejan.Ostojic
  */
-@Table(name = "competition", autoIncrement = false)
+@Table(name = "competition", autoIncrement = true)
 public class CompetitionDto {
 
+    @Column(name = "id", isPrimaryKey = true)
     private Integer id;
+    
+    @Column(name = "name")
+    private String name;
+    
+    @Column(name = "description")
     private String description;
-    private Date registrationOpen;
-    private Date registrationClose;
-    private Date eventStart;
+    
+    @Column(name = "registration_open")
+    private java.sql.Timestamp registrationOpen;
+    
+    @Column(name = "registration_close")
+    private java.sql.Timestamp registrationClose;
+    
+    @Column(name = "event_start_date")
+    private java.sql.Timestamp eventStart;
+    
     private List<RouteDto> routes;
     private List<RegistrationFeeDto> registrationFees;
 
     public CompetitionDto() {
     }
 
-    public CompetitionDto(Integer id, String description, Date registrationOpen, Date registrationClose, Date eventStart) {
+    public CompetitionDto(Integer id, String name, String description, java.sql.Timestamp registrationOpen, java.sql.Timestamp registrationClose, java.sql.Timestamp eventStart, List<RouteDto> routes, List<RegistrationFeeDto> registrationFees) {
         this.id = id;
+        this.name = name;
         this.description = description;
         this.registrationOpen = registrationOpen;
         this.registrationClose = registrationClose;
         this.eventStart = eventStart;
+        this.routes = routes;
+        this.registrationFees = registrationFees;
     }
 
-    public Date getEventStart() {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    
+    public java.sql.Timestamp getEventStart() {
         return eventStart;
     }
 
-    public void setEventStart(Date eventStart) {
+    public void setEventStart(java.sql.Timestamp eventStart) {
         this.eventStart = eventStart;
     }
 
@@ -60,19 +86,19 @@ public class CompetitionDto {
         this.description = description;
     }
 
-    public Date getRegistrationOpen() {
+    public java.sql.Timestamp getRegistrationOpen() {
         return registrationOpen;
     }
 
-    public void setRegistrationOpen(Date registrationOpen) {
+    public void setRegistrationOpen(java.sql.Timestamp registrationOpen) {
         this.registrationOpen = registrationOpen;
     }
 
-    public Date getRegistrationClose() {
+    public java.sql.Timestamp getRegistrationClose() {
         return registrationClose;
     }
 
-    public void setRegistrationClose(Date registrationClose) {
+    public void setRegistrationClose(java.sql.Timestamp registrationClose) {
         this.registrationClose = registrationClose;
     }
 

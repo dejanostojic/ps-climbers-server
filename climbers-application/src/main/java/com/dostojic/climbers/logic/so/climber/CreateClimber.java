@@ -6,7 +6,7 @@
 package com.dostojic.climbers.logic.so.climber;
 
 import com.dostojic.climbers.domain.Climber;
-import com.dostojic.climbers.logic.ClimberRepository;
+import com.dostojic.climbers.repository.ClimberRepository;
 import com.dostojic.climbers.logic.TransactionManager;
 import com.dostojic.climbers.logic.so.template.GeneralUpdateSO;
 
@@ -14,22 +14,24 @@ import com.dostojic.climbers.logic.so.template.GeneralUpdateSO;
  *
  * @author Dejan.Ostojic
  */
-public class CreateClimberSO extends GeneralUpdateSO<Climber, Climber> {
+public class CreateClimber extends GeneralUpdateSO<Climber, Climber> {
 
     private final ClimberRepository climberRepository;
 
-    public CreateClimberSO(TransactionManager transactionManager, ClimberRepository climberRepository) {
+    public CreateClimber(TransactionManager transactionManager, ClimberRepository climberRepository) {
         super(transactionManager);
         this.climberRepository = climberRepository;
     }
 
     @Override
     protected void checkPrecondition(Climber climber) throws Exception {
-        System.out.println("TODO ADD PRECONDITINOS FOR INSET");
+        new ClimberValidator().validate(climber);
     }
 
     @Override
     protected Climber executeOperation(Climber climber) throws Exception {
+        System.out.println("DEBUG: Inserting climber: " + climber);
+
         return climberRepository.insert(climber);
     }
 

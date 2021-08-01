@@ -7,28 +7,26 @@ package com.dostojic.climbers.logic.so.climber;
 
 import com.dostojic.climbers.logic.so.template.GeneralUpdateSO;
 import com.dostojic.climbers.domain.Climber;
-import com.dostojic.climbers.logic.ClimberRepository;
+import com.dostojic.climbers.repository.ClimberRepository;
 import com.dostojic.climbers.logic.TransactionManager;
 
 /**
  *
  * @author Dejan.Ostojic
  */
-public class UpdateClimberSO extends GeneralUpdateSO<Climber, Boolean>{
+public class UpdateClimber extends GeneralUpdateSO<Climber, Boolean> {
+
     ClimberRepository climberRepository;
-    
-    public UpdateClimberSO(TransactionManager transactionManager, ClimberRepository climberRepository) {
+
+    public UpdateClimber(TransactionManager transactionManager, ClimberRepository climberRepository) {
         super(transactionManager);
         this.climberRepository = climberRepository;
-        
+
     }
 
     @Override
-    protected void checkPrecondition(Climber domainObject) throws Exception {
-//
-        // no preconditions but could be something like
-        // repository.getAll();
-        System.out.println("no checking preconditions for update climber");
+    protected void checkPrecondition(Climber climber) throws Exception {
+        new ClimberValidator().validate(climber);
     }
 
     @Override

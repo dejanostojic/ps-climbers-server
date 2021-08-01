@@ -14,14 +14,16 @@ import com.dostojic.climbers.dbbr.improved.annotation.Table;
  */
 @Table(name = "climber", autoIncrement = true)
 public class ClimberDto {
-    
+
     @Column(name = "id", isPrimaryKey = true)
     private Integer id;
-        
+    
     @Column(name = "first_name")
     private String firstName;
+    
     @Column(name = "last_name")
     private String lastName;
+    
     @Column(name = "year_of_birth")
     private Integer yearOfBirth;
 
@@ -56,6 +58,5 @@ public class ClimberDto {
     public void setYearOfBirth(Integer yearOfBirth) {
         this.yearOfBirth = yearOfBirth;
     }
-    
-    
+
 }

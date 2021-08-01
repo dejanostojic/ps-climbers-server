@@ -9,5 +9,6 @@ package com.dostojic.climbers.logic.so.template;
  *
  * @author Dejan.Ostojic
  */
-public interface GeneralSO {
+public interface GeneralSO<DomainObjectIn, DomainObjectOut> {
+    DomainObjectOut execute(DomainObjectIn domainObject) throws Exception;
 }

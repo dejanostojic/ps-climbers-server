@@ -14,7 +14,7 @@ import com.dostojic.climbers.logic.TransactionManager;
  * @param <InputParam>
  * @param <OperationResult>
  */
-public abstract class GeneralReportingSO<InputParam, OperationResult>  implements GeneralSO {
+public abstract class GeneralReportingSO<InputParam, OperationResult>  implements GeneralSO<InputParam, OperationResult> {
 
     protected final TransactionManager transactionManager;
 

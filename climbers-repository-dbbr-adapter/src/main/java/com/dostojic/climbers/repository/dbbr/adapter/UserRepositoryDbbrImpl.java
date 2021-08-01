@@ -11,7 +11,7 @@ import com.dostojic.climbers.dbbr.GeneralDObject;
 import com.dostojic.climbers.dbbr.improved.DbBroker;
 import static com.dostojic.climbers.dbbr.improved.QueryUtils.stringLiteral;
 import com.dostojic.climbers.domain.User;
-import com.dostojic.climbers.logic.UserRepository;
+import com.dostojic.climbers.repository.UserRepository;
 import com.dostojic.climbers.repository.dbbr.adapter.mapper.UserMapper;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  *
  * @author planina
  */
-public class UserRepositoryDbbrImpl implements UserRepository{
+public class UserRepositoryDbbrImpl implements UserRepository {
 
     private DbBroker<UserDto, Long> broker;
 
