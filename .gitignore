@@ -15,6 +15,10 @@ build/
 dist/
 nbproject/*
 *.class
+
+# idea
+idea/*
+
 #general swap/backup files
 *.so
 *.log
