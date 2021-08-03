@@ -17,7 +17,9 @@ nbproject/*
 *.class
 
 # idea
-idea/*
+.idea/*
+*.iml
+target/*
 
 #general swap/backup files
 *.so
